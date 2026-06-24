@@ -75,7 +75,7 @@ g++ -Wall -std=c++17 -o alpha-redis main.cpp hashtable.cpp list.cpp parser.cpp
 |---|---|
 | Baba SIDIBE | Développeur |
 | Ndeye Coumba BA | Développeur |
-| Mohamed Mourtada CAMARA | Développeur |
+| Mohamed Mourtada KAMARA | Développeur |
 | Mariane SECK | Développeur |
 | Ndeye Maguette NIANG | Développeur |
 
@@ -84,9 +84,3 @@ g++ -Wall -std=c++17 -o alpha-redis main.cpp hashtable.cpp list.cpp parser.cpp
 ## Encadrant
 
 **M. Ibrahima GAYE** – ibrahima.gaye.upa@gmail.com
-
----
-
-## Date de rendu
-
-**Mercredi 05 Juillet 2026**
