@@ -9,7 +9,7 @@ Node *table[TABLE_SIZE] = {nullptr};
 unsigned int hash_djb2(const std::string &key) {
     unsigned int hash = 5381;
     for (char c : key) {
-        hash = ((hash << 5) + hash) + c; // hash * 33 + c
+        hash = ((hash << 5) + hash) + c;
     }
     return hash % TABLE_SIZE;
 }
@@ -19,10 +19,8 @@ void cmd_set(const std::string &key, const std::string &value) {
     unsigned int index = hash_djb2(key);
     Node *current = table[index];
 
-    // Chercher si la clé existe déjà
     while (current != nullptr) {
         if (current->key == key) {
-            // Clé trouvée : mise à jour
             current->str_value = value;
             current->type = TYPE_STRING;
             std::cout << "OK" << std::endl;
@@ -31,7 +29,6 @@ void cmd_set(const std::string &key, const std::string &value) {
         current = current->next;
     }
 
-    // Clé inexistante : créer un nouveau maillon
     Node *newNode = new Node();
     newNode->key = key;
     newNode->str_value = value;
@@ -81,4 +78,52 @@ void cmd_del(const std::string &key) {
         current = current->next;
     }
     std::cout << "(integer) 0" << std::endl;
+}
+
+// KEYS : liste toutes les clés
+void cmd_keys() {
+    int count = 0;
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        Node *current = table[i];
+        while (current != nullptr) {
+            std::cout << (count + 1) << ") \"" << current->key << "\"" << std::endl;
+            count++;
+            current = current->next;
+        }
+    }
+    if (count == 0) {
+        std::cout << "(empty)" << std::endl;
+    }
+}
+
+// FLUSHALL : vide toute la base
+void cmd_flushall() {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        Node *current = table[i];
+        while (current != nullptr) {
+            Node *toDelete = current;
+            current = current->next;
+            if (toDelete->type == TYPE_LIST && toDelete->list_value != nullptr) {
+                delete toDelete->list_value;
+            }
+            delete toDelete;
+        }
+        table[i] = nullptr;
+    }
+    std::cout << "OK" << std::endl;
+}
+
+// TYPE key
+std::string cmd_type(const std::string &key) {
+    unsigned int index = hash_djb2(key);
+    Node *current = table[index];
+
+    while (current != nullptr) {
+        if (current->key == key) {
+            if (current->type == TYPE_STRING) return "string";
+            if (current->type == TYPE_LIST)   return "list";
+        }
+        current = current->next;
+    }
+    return "none";
 }

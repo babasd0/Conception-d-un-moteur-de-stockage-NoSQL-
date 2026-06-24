@@ -23,8 +23,6 @@ void parse_and_execute(const std::string &line) {
     if (tokens.empty()) return;
 
     std::string cmd = tokens[0];
-
-    // Convertir la commande en majuscules
     for (char &c : cmd) c = toupper(c);
 
     if (cmd == "SET") {
@@ -75,6 +73,43 @@ void parse_and_execute(const std::string &line) {
             return;
         }
         std::cout << cmd_rpop(tokens[1]) << std::endl;
+
+    } else if (cmd == "LRANGE") {
+        if (tokens.size() < 4) {
+            std::cout << "(error) Usage: LRANGE key start end" << std::endl;
+            return;
+        }
+        int start = std::stoi(tokens[2]);
+        int end   = std::stoi(tokens[3]);
+        cmd_lrange(tokens[1], start, end);
+
+    } else if (cmd == "KEYS") {
+        cmd_keys();
+
+    } else if (cmd == "FLUSHALL") {
+        cmd_flushall();
+
+    } else if (cmd == "TYPE") {
+        if (tokens.size() < 2) {
+            std::cout << "(error) Usage: TYPE key" << std::endl;
+            return;
+        }
+        std::cout << cmd_type(tokens[1]) << std::endl;
+
+    } else if (cmd == "HELP") {
+        std::cout << "Commandes disponibles:" << std::endl;
+        std::cout << "  SET key value" << std::endl;
+        std::cout << "  GET key" << std::endl;
+        std::cout << "  DEL key" << std::endl;
+        std::cout << "  LPUSH key value" << std::endl;
+        std::cout << "  RPUSH key value" << std::endl;
+        std::cout << "  LPOP key" << std::endl;
+        std::cout << "  RPOP key" << std::endl;
+        std::cout << "  LRANGE key start end" << std::endl;
+        std::cout << "  KEYS" << std::endl;
+        std::cout << "  FLUSHALL" << std::endl;
+        std::cout << "  TYPE key" << std::endl;
+        std::cout << "  EXIT / QUIT" << std::endl;
 
     } else if (cmd == "EXIT" || cmd == "QUIT") {
         std::cout << "Bye!" << std::endl;
